@@ -625,3 +625,13 @@ cleanResult cleanTime(std::vector<double> state, double dt, trace tr){
         }
     }
 }
+
+void trackAndPrint(std::vector<double> state, double dt, trace tr){
+    double t = 0;
+    double energy;
+    for(int i = 0; i < (int)(60.0/dt); i++) {
+        printf("%e %e %e %e\n", t, state[0], state[1], state[2]);
+        symplecticStep(state, dt, energy, t, tr);
+        t = t + dt;
+    }
+}

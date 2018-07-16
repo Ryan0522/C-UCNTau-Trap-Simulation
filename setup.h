@@ -2,8 +2,8 @@
 
 //#define TRACKGENERATOR randomPointTrapEdE
 //#define TRACKGENERATOR randomPointTrapOptimum
-#define TRACKGENERATOR randomPointTrapOptimumCleanable
-//#define TRACKGENERATOR randomPointTrapEdECleanable
+//#define TRACKGENERATOR randomPointTrapOptimumCleanable
+#define TRACKGENERATOR randomPointTrapEdECleanable
 //#define TRACKGENERATOR randomPointTrapOptimumOnlyCleanable
 
 //#define ECUT 7.6071
@@ -12,6 +12,8 @@
 #define THETAPOW 0.264079
 #define ZETACUT 0.0160763
 #define BTHICK 5.76556
+//#define ZETACUT 0.0
+//#define BTHICK 20.0
 
 //#define TRACKER daggerHitTimes
 #define TRACKER fixedEffDaggerHitTime
@@ -24,15 +26,15 @@
 //#define WRITER writeCleanRes
 //#define WRITER writeLyapRes
 
-#define CLEANINGTIME 0
-//#define CLEANINGHEIGHT 0.38
-#define CLEANINGHEIGHT 0.43
+#define CLEANINGTIME 50
+#define CLEANINGHEIGHT 0.38
+//#define CLEANINGHEIGHT 0.43
 //#define CLEANINGHEIGHT 0.35
 #define RAISEDCLEANINGHEIGHT 0.43
-//#define ECLEAN 5.077298660340679e-27
-#define ECLEAN 5.571749397933261e-27
+#define ECLEAN 5.077298660340679e-27
+//#define ECLEAN 5.571749397933261e-27
 
-#define FIRSTDIPTIME 270
+#define FIRSTDIPTIME 20
 
 #define HOLDTIME 20
 
@@ -41,9 +43,9 @@
 //#define HEIGHTS {0.49, 0.380, 0.250, 0.180, 0.140, 0.110, 0.080, 0.060, 0.040, 0.010}
 //#define ENDTIMES {holdT,  holdT+40.0,  holdT+80.0,  holdT+100.0, holdT+120.0, holdT+140.0, holdT+160.0, holdT+180.0, holdT+200.0, holdT+300.0}
 
-//#define NDIPS 4
-//#define HEIGHTS {0.49, 0.380, 0.250, 0.010}
-//#define ENDTIMES {holdT, holdT+20.0, holdT+40.0, holdT+140.0}
+#define NDIPS 4
+#define HEIGHTS {0.49, 0.380, 0.250, 0.010}
+#define ENDTIMES {holdT, holdT+20.0, holdT+40.0, holdT+140.0}
 
 //#define NDIPS 13
 //#define HEIGHTS {0.49, 0.38, 0.250,   0.49, 0.380, 0.250, 0.180, 0.140, 0.110, 0.080, 0.060, 0.040, 0.010}
@@ -55,9 +57,9 @@
 //#define HEIGHTS {0.49, 0.38, 0.25, 0.18, 0.14, 0.11, 0.08, 0.06, 0.04, 0.01}
 //#define ENDTIMES {holdT, holdT+40.0, holdT+80, holdT+100, holdT+120, holdT+140, holdT+160, holdT+180, holdT+200.0, holdT+500.0}
 
-#define NDIPS 3
-#define HEIGHTS {0.49, 0.38, 0.010}
-#define ENDTIMES {holdT, holdT+300, holdT+500}
+//#define NDIPS 3
+//#define HEIGHTS {0.49, 0.38, 0.010}
+//#define ENDTIMES {holdT, holdT+300, holdT+500}
 
 
 #define HEATMULT 0.0

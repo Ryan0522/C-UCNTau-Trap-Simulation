@@ -49,4 +49,6 @@ fixedResult fixedEffDaggerHitTime_PSE(std::vector<double> state, double dt, trac
 cleanResult cleanTime(std::vector<double> state, double dt, trace tr);
 noabsResult daggerHitTimes(std::vector<double> state, double dt, trace tr);
 
+void trackAndPrint(std::vector<double> state, double dt, trace tr);
+
 #endif /* TRACKUCN_H */
