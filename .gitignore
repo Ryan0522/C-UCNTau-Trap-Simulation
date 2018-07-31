@@ -1,2 +1,5 @@
 bin/*
 sim
+dump*
+test*
+*.ipynb
