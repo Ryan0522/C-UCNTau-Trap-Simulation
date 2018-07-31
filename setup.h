@@ -21,6 +21,8 @@
 //#define TRACKER cleanTime
 //#define TRACKER calcLyap
 
+#define TRACKANDPRINT 1
+
 //#define WRITER writeNoabsRes
 #define WRITER writeFixedRes
 //#define WRITER writeCleanRes

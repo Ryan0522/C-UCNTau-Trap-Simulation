@@ -274,6 +274,13 @@ int main(int argc, char** argv) {
     for(int i = 0; i < rank; i++) {
         jump();
     }
+    
+    if(TRACKANDPRINT) {
+        trackAndPrint(traj.back(), dt, tr);
+        binfile.close();
+        ierr = MPI_Finalize();
+        return 0;
+    }
         
     for(auto it = traj.begin(); it < traj.end(); it++) {
 //        double lyap = calcLyap(*it, dt, tr, 0.0);
