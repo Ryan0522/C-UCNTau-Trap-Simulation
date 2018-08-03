@@ -4,6 +4,7 @@
 #include "inc/trackUCN.hpp"
 #include "inc/fields_nate.h"
 #include "inc/lyap.hpp"
+#include "inc/geometry.hpp"
 #include <cmath>
 #include <mpi.h>
 #include <iostream>

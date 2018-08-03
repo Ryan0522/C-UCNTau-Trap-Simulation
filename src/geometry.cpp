@@ -27,14 +27,16 @@ void normalize(std::vector<double> &a) {
 }
 
 double zOffDipCalc(double t) {
-    double z;
-    int i;
+    double acc = 6.0;
+    double vel = 1.6;
+    double spr = 51200/2.0;
     
     double holdT = HOLDTIME;
-    double speed;
     
     double dipHeights[NDIPS] = HEIGHTS; //3 dip
     double dipEnds[NDIPS] = ENDTIMES; //3 dip
+    
+    int i;
     
     if(t > dipEnds[NDIPS-1]) {
         return 0.01;
@@ -50,17 +52,101 @@ double zOffDipCalc(double t) {
         return dipHeights[0];
     }
     
-    if(dipHeights[i-1] > dipHeights[i]) {
-        speed = -0.49/13.0;
-        z = dipHeights[i-1] + speed*(t-dipEnds[i-1]);
-        return z > dipHeights[i] ? z : dipHeights[i];
+    double target = dipHeights[i];
+    double start = dipHeights[i-1];
+    
+    double distance = fabs(target - start)*1000000;
+    
+    double time = (distance - vel*(vel/acc)*spr)/(vel*spr);
+    
+    double sign = dipHeights[i] - dipHeights[i-1] > 0 ? 1 : -1;
+    sign = dipHeights[i] == dipHeights[i-1] ? 0 : sign;
+    
+    if(time > 0) {
+//        printf("Flat\n");
+        if((t - dipEnds[i-1]) < (vel/acc)) {
+            return dipHeights[i-1]
+                + sign*(
+                    acc*spr*(t - dipEnds[i-1])*(t - dipEnds[i-1])/2.0
+                )/1000000;
+        }
+        else if((t - dipEnds[i-1]) >= (vel/acc) && (t - dipEnds[i-1]) < ((vel/acc) + time)) {
+            return dipHeights[i-1]
+                + sign*(
+                    (vel/acc)*vel*spr/2.0 + (t - dipEnds[i-1] - vel/acc)*vel*spr
+                )/1000000;
+        }
+        else if((t - dipEnds[i-1]) >= ((vel/acc) + time) && (t - dipEnds[i-1]) < (2*(vel/acc) + time)){
+            return dipHeights[i-1]
+                + sign*(
+                    (vel/acc)*vel*spr/2.0
+                    + time*vel*spr
+                    + vel*spr*(t - dipEnds[i-1] - time - vel/acc)
+                    - acc*spr*(t - dipEnds[i-1] - time - vel/acc)*(t - dipEnds[i-1] - time - vel/acc)/2.0
+                )/1000000;
+        }
+        else {
+            return dipHeights[i];
+        }
     }
     else {
-        speed = 0.49/13.0;
-        z = dipHeights[i-1] + speed*(t-dipEnds[i-1]);
-        return z < dipHeights[i] ? z : dipHeights[i];
+        double halfTime = sqrt(distance/(acc*spr));
+//        printf("UnFlat\n");
+        if(t - dipEnds[i-1] < halfTime) {
+            return dipHeights[i-1]
+                + sign*(
+                    acc*spr*(t - dipEnds[i-1])*(t - dipEnds[i-1])/2.0
+                )/1000000;
+        }
+        else if(t - dipEnds[i-1] >= halfTime && t - dipEnds[i-1] < 2*halfTime){
+            return dipHeights[i-1]
+                + (dipHeights[i]-dipHeights[i-1])/2
+                + sign*(
+                    (acc*spr*halfTime*(t - dipEnds[i-1] - halfTime))
+                    - acc*spr*(t - dipEnds[i-1] - halfTime)*(t - dipEnds[i-1] - halfTime)/2.0
+                )/1000000;
+        }
+        else {
+            return dipHeights[i];
+        }
     }
 }
+
+//double zOffDipCalc(double t) {
+//    double z;
+//    int i;
+//    
+//    double holdT = HOLDTIME;
+//    double speed;
+//    
+//    double dipHeights[NDIPS] = HEIGHTS; //3 dip
+//    double dipEnds[NDIPS] = ENDTIMES; //3 dip
+//    
+//    if(t > dipEnds[NDIPS-1]) {
+//        return 0.01;
+//    }
+//    
+//    for(i = 0; i < NDIPS; i++) {
+//        if(dipEnds[i] > t) {
+//            break;
+//        }
+//    }
+//    
+//    if(i == 0) {
+//        return dipHeights[0];
+//    }
+//    
+//    if(dipHeights[i-1] > dipHeights[i]) {
+//        speed = -0.49/13.0;
+//        z = dipHeights[i-1] + speed*(t-dipEnds[i-1]);
+//        return z > dipHeights[i] ? z : dipHeights[i];
+//    }
+//    else {
+//        speed = 0.49/13.0;
+//        z = dipHeights[i-1] + speed*(t-dipEnds[i-1]);
+//        return z < dipHeights[i] ? z : dipHeights[i];
+//    }
+//}
 
 void reflect(std::vector<double> &state, std::vector<double> norm, std::vector<double> tang) {
     double pTarget = sqrt(state[3]*state[3] + state[4]*state[4] + state[5]*state[5]);
