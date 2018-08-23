@@ -3,8 +3,8 @@
 //#define TRACKGENERATOR randomPointTrapEdE
 //#define TRACKGENERATOR randomPointTrapOptimum
 //#define TRACKGENERATOR randomPointTrapOptimumCleanable
-#define TRACKGENERATOR randomPointTrapEdECleanable
-//#define TRACKGENERATOR randomPointTrapOptimumOnlyCleanable
+//#define TRACKGENERATOR randomPointTrapEdECleanable
+#define TRACKGENERATOR randomPointTrapOptimumOnlyCleanable
 
 //#define ECUT 7.6071
 #define ECUT 34.776124570119975
@@ -15,16 +15,24 @@
 //#define ZETACUT 0.0
 //#define BTHICK 20.0
 
-#define TRACKER daggerHitTimes
+//New minimum with better timing
+//#define ECUT 7.2092
+//#define EPOW 1.17727
+//#define THETAPOW 0.275457
+//#define ZETACUT 0.0127203
+//#define BTHICK 5.59909
+
+//#define TRACKER daggerHitTimes
 //#define TRACKER fixedEffDaggerHitTime
 //#define TRACKER fixedEffDaggerHitTime_PSE
+#define TRACKER fixedEffDaggerHitTime_reinsert
 //#define TRACKER cleanTime
 //#define TRACKER calcLyap
 
 #define TRACKANDPRINT 0
 
-#define WRITER writeNoabsRes
-//#define WRITER writeFixedRes
+//#define WRITER writeNoabsRes
+#define WRITER writeFixedRes
 //#define WRITER writeCleanRes
 //#define WRITER writeLyapRes
 
@@ -36,18 +44,18 @@
 //#define ECLEAN 5.077298660340679e-27
 #define ECLEAN 5.571749397933261e-27
 
-#define FIRSTDIPTIME 20
+#define FIRSTDIPTIME 1380
 
-#define HOLDTIME 20
+#define HOLDTIME 1380
 
-//9 Dip
-#define NDIPS 10
-#define HEIGHTS {0.49, 0.380, 0.250, 0.180, 0.140, 0.110, 0.080, 0.060, 0.040, 0.010}
-#define ENDTIMES {holdT,  holdT+40.0,  holdT+80.0,  holdT+100.0, holdT+120.0, holdT+140.0, holdT+160.0, holdT+180.0, holdT+200.0, holdT+300.0}
+////9 Dip
+//#define NDIPS 10
+//#define HEIGHTS {0.49, 0.380, 0.250, 0.180, 0.140, 0.110, 0.080, 0.060, 0.040, 0.010}
+//#define ENDTIMES {holdT,  holdT+40.0,  holdT+80.0,  holdT+100.0, holdT+120.0, holdT+140.0, holdT+160.0, holdT+180.0, holdT+200.0, holdT+300.0}
 
-//#define NDIPS 4
-//#define HEIGHTS {0.49, 0.380, 0.250, 0.010}
-//#define ENDTIMES {holdT, holdT+20.0, holdT+40.0, holdT+140.0}
+#define NDIPS 4
+#define HEIGHTS {0.49, 0.380, 0.250, 0.010}
+#define ENDTIMES {holdT, holdT+20.0, holdT+40.0, holdT+140.0}
 
 //#define NDIPS 13
 //#define HEIGHTS {0.49, 0.38, 0.250,   0.49, 0.380, 0.250, 0.180, 0.140, 0.110, 0.080, 0.060, 0.040, 0.010}
@@ -64,7 +72,7 @@
 //#define ENDTIMES {holdT, holdT+300, holdT+500}
 
 
-#define HEATMULT 0.0
+#define HEATMULT 1.0
 //#define XFNAME "/N/u/nbcallah/BigRed2/ChaoticTrap/C-UCNtau-Trap-Sims/xvals.bin"
 //#define YFNAME "/N/u/nbcallah/BigRed2/ChaoticTrap/C-UCNtau-Trap-Sims/yvals.bin"
 //#define ZFNAME "/N/u/nbcallah/BigRed2/ChaoticTrap/C-UCNtau-Trap-Sims/zvals.bin"
