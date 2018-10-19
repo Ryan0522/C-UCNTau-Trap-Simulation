@@ -7,25 +7,25 @@
 #define TRACKGENERATOR randomPointTrapOptimumOnlyCleanable
 
 //#define ECUT 7.6071
-#define ECUT 34.776124570119975
-#define EPOW 1.30448
-#define THETAPOW 0.264079
-#define ZETACUT 0.0160763
-#define BTHICK 5.76556
+//#define ECUT 34.776124570119975
+//#define EPOW 1.30448
+//#define THETAPOW 0.264079
+//#define ZETACUT 0.0160763
+//#define BTHICK 5.76556
 //#define ZETACUT 0.0
 //#define BTHICK 20.0
 
 //New minimum with better timing
-//#define ECUT 7.2092
-//#define EPOW 1.17727
-//#define THETAPOW 0.275457
-//#define ZETACUT 0.0127203
-//#define BTHICK 5.59909
+#define ECUT 7.2092
+#define EPOW 1.17727
+#define THETAPOW 0.275457
+#define ZETACUT 0.0127203
+#define BTHICK 5.59909
 
 //#define TRACKER daggerHitTimes
-//#define TRACKER fixedEffDaggerHitTime
+#define TRACKER fixedEffDaggerHitTime
 //#define TRACKER fixedEffDaggerHitTime_PSE
-#define TRACKER fixedEffDaggerHitTime_reinsert
+//#define TRACKER fixedEffDaggerHitTime_reinsert
 //#define TRACKER cleanTime
 //#define TRACKER calcLyap
 
@@ -44,10 +44,13 @@
 //#define ECLEAN 5.077298660340679e-27
 #define ECLEAN 5.571749397933261e-27
 
+
+//Set holding time
 #define FIRSTDIPTIME 1380
 
 #define HOLDTIME 1380
 
+//holdT gets replaced by HOLDTIME inside the tracking function
 ////9 Dip
 //#define NDIPS 10
 //#define HEIGHTS {0.49, 0.380, 0.250, 0.180, 0.140, 0.110, 0.080, 0.060, 0.040, 0.010}
