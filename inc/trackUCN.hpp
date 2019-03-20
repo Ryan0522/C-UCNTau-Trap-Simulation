@@ -48,6 +48,7 @@ fixedResult fixedEffDaggerHitTime(std::vector<double> state, double dt, trace tr
 fixedResult fixedEffDaggerHitTime_reinsert(std::vector<double> state, double dt, trace tr);
 fixedResult fixedEffDaggerHitTime_PSE(std::vector<double> state, double dt, trace tr);
 cleanResult cleanTime(std::vector<double> state, double dt, trace tr);
+noabsResult noabsCleanTime(std::vector<double> state, double dt, trace tr);
 noabsResult daggerHitTimes(std::vector<double> state, double dt, trace tr);
 
 void trackAndPrint(std::vector<double> state, double dt, trace tr);

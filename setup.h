@@ -2,9 +2,9 @@
 
 //#define TRACKGENERATOR randomPointTrapEdE
 //#define TRACKGENERATOR randomPointTrapOptimum
-//#define TRACKGENERATOR randomPointTrapOptimumCleanable
+#define TRACKGENERATOR randomPointTrapOptimumCleanable
 //#define TRACKGENERATOR randomPointTrapEdECleanable
-#define TRACKGENERATOR randomPointTrapOptimumOnlyCleanable
+//#define TRACKGENERATOR randomPointTrapOptimumOnlyCleanable
 
 //#define ECUT 7.6071
 //#define ECUT 34.776124570119975
@@ -23,16 +23,17 @@
 #define BTHICK 5.59909
 
 //#define TRACKER daggerHitTimes
-#define TRACKER fixedEffDaggerHitTime
+//#define TRACKER fixedEffDaggerHitTime
 //#define TRACKER fixedEffDaggerHitTime_PSE
 //#define TRACKER fixedEffDaggerHitTime_reinsert
 //#define TRACKER cleanTime
 //#define TRACKER calcLyap
+#define TRACKER noabsCleanTime
 
 #define TRACKANDPRINT 0
 
-//#define WRITER writeNoabsRes
-#define WRITER writeFixedRes
+#define WRITER writeNoabsRes
+//#define WRITER writeFixedRes
 //#define WRITER writeCleanRes
 //#define WRITER writeLyapRes
 

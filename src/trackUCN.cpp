@@ -853,6 +853,163 @@ cleanResult cleanTime(std::vector<double> state, double dt, trace tr){
     }
 }
 
+noabsResult noabsCleanTime(std::vector<double> state, double dt, trace tr){
+    std::vector<double> tang = {0.0, 0.0, 1.0};
+    std::vector<double> normPlus = {0.0, 1.0, 0.0};
+    std::vector<double> normMinus = {0.0, -1.0, 0.0};
+    std::vector<double> normZPlus = {0.0, 0.0, 1.0};
+    std::vector<double> normZMinus = {0.0, 0.0, -1.0};
+    std::vector<double> cleanTang = {0.0, 1.0, 0.0};
+    noabsResult res;
+    
+    double t = 0;
+    
+    res.theta = acos(state[5]/sqrt(state[3]*state[3] + state[4]*state[4] + state[5]*state[5]));
+    
+    potential(&state[0], &state[1], &state[2], &(res.energy), &t, &tr);
+    res.energy = res.energy - MINU + (state[3]*state[3] + state[4]*state[4] + state[5]*state[5])/(2*MASS_N);
+    
+    double settlingTime;
+    do {
+        settlingTime = -70*log(nextU01());
+    } while(settlingTime >= 150);
+    
+    settlingTime = settlingTime + CLEANINGTIME;
+    
+    int nHit = 0;
+
+    std::vector<double> prevState(6);
+    int numSteps = settlingTime/dt;
+    double energy;
+    for(int i = 0; i < numSteps; i++) {
+        if(nHit >= NRECORDS) {
+            return res;
+        }
+        prevState = state;
+        symplecticStep(state, dt, energy, t, tr);
+        int code = checkClean(state, prevState, CLEANINGHEIGHT);
+        if(code == 1) {
+            res.times[nHit] = t - settlingTime;
+            res.ePerps[nHit] = state[5]*state[5]/(2*MASS_N);
+            res.zetas[nHit] = -1;
+            if(state[2] > -1.5 + CLEANINGHEIGHT && prevState[2] < -1.5 + CLEANINGHEIGHT) { //moving up
+                reflect(prevState, normZMinus, cleanTang);
+            }
+            else if(state[2] < -1.5 + CLEANINGHEIGHT && prevState[2] > -1.5 + CLEANINGHEIGHT) {
+                reflect(prevState, normZPlus, cleanTang);
+            }
+            else {
+                printf("Boo!\n");
+            }
+            state = prevState;
+            nHit += 1;
+        }
+        if(code == 2) {
+            res.times[nHit] = t - settlingTime;
+            res.ePerps[nHit] = state[5]*state[5]/(2*MASS_N);
+            res.zetas[nHit] = -2;
+            if(state[2] > -1.5 + CLEANINGHEIGHT && prevState[2] < -1.5 + CLEANINGHEIGHT) { //moving up
+                reflect(prevState, normZMinus, cleanTang);
+            }
+            else if(state[2] < -1.5 + CLEANINGHEIGHT && prevState[2] > -1.5 + CLEANINGHEIGHT) {
+                reflect(prevState, normZPlus, cleanTang);
+            }
+            else {
+                printf("Boo!\n");
+            }
+            state = prevState;
+            nHit += 1;
+        }
+        t = t + dt;
+    }
+    
+    while(nHit < NRECORDS) {
+        prevState = state;
+        symplecticStep(state, dt, energy, t, tr);
+        t = t + dt;
+        int code = checkClean(state, prevState, RAISEDCLEANINGHEIGHT);
+        if(code == 1) {
+            res.times[nHit] = t - settlingTime;
+            res.ePerps[nHit] = state[5]*state[5]/(2*MASS_N);
+            res.zetas[nHit] = -1;
+            if(state[2] > -1.5 + RAISEDCLEANINGHEIGHT && prevState[2] < -1.5 + RAISEDCLEANINGHEIGHT) { //moving up
+                reflect(prevState, normZMinus, cleanTang);
+            }
+            else if(state[2] < -1.5 + RAISEDCLEANINGHEIGHT && prevState[2] > -1.5 + RAISEDCLEANINGHEIGHT) {
+                reflect(prevState, normZPlus, cleanTang);
+            }
+            else {
+                printf("Boo!\n");
+            }
+            state = prevState;
+            nHit += 1;
+        }
+        if(code == 2) {
+            res.times[nHit] = t - settlingTime;
+            res.ePerps[nHit] = state[5]*state[5]/(2*MASS_N);
+            res.zetas[nHit] = -2;
+            if(state[2] > -1.5 + RAISEDCLEANINGHEIGHT && prevState[2] < -1.5 + RAISEDCLEANINGHEIGHT) { //moving up
+                reflect(prevState, normZMinus, cleanTang);
+            }
+            else if(state[2] < -1.5 + RAISEDCLEANINGHEIGHT && prevState[2] > -1.5 + RAISEDCLEANINGHEIGHT) {
+                reflect(prevState, normZPlus, cleanTang);
+            }
+            else {
+                printf("Boo!\n");
+            }
+            state = prevState;
+            nHit += 1;
+        }
+        if(isnan(energy)) {
+            res.times[nHit] = std::numeric_limits<float>::quiet_NaN();
+            res.ePerps[nHit] = std::numeric_limits<float>::quiet_NaN();
+            res.zetas[nHit] = std::numeric_limits<float>::quiet_NaN();
+            break;
+        }
+        if((prevState[1] < 0 && state[1] > 0) || (prevState[1] > 0 && state[1] < 0)) {
+            double fracTravel = fabs(prevState[1])/(fabs(state[1]) + fabs(prevState[1]));
+            double predX = prevState[0] + fracTravel * (state[0] - prevState[0]);
+            double predZ = prevState[2] + fracTravel * (state[2] - prevState[2]);
+            
+            double zOff = zOffDipCalc(t - settlingTime);
+            
+            if(checkDagHit(predX, 0.0, predZ, zOff)) {
+                res.times[nHit] = t - settlingTime;
+                res.ePerps[nHit] = state[4]*state[4]/(2*MASS_N);
+                res.zetas[nHit] = calcDagZeta(predX, 0.0, predZ, zOff);
+                nHit += 1;
+                if(prevState[1] > 0 && prevState[4] < 0) {
+                    reflect(prevState, normPlus, tang);
+                }
+                else {
+                    reflect(prevState, normMinus, tang);
+                }
+                state = prevState;
+            }
+            else if(checkHouseHitLow(predX, 0.0, predZ, zOff)) {
+                if(prevState[1] > 0 && prevState[4] < 0) {
+                    reflect(prevState, normPlus, tang);
+                }
+                else {
+                    reflect(prevState, normMinus, tang);
+                }
+                state = prevState;
+            }
+            else if(checkHouseHitHigh(predX, 0.0, predZ, zOff)) {
+                if(prevState[1] > 0 && prevState[4] < 0) {
+                    reflect(prevState, normPlus, tang);
+                }
+                else {
+                    reflect(prevState, normMinus, tang);
+                }
+                state = prevState;
+            }
+        }
+    }
+    
+    return res;
+}
+
 void trackAndPrint(std::vector<double> state, double dt, trace tr){
     double t = 0;
     double energy;
