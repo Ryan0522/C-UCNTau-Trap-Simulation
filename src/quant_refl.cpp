@@ -10,6 +10,13 @@ extern "C" {
     #include "../inc/xorshift.h"
 }
 
+/**
+ * Performs matrix multiplication of two 2x2 matrices with complex entries.
+ * //Asserts that both input vectors are of size 4.
+ * @param a first vector.
+ * @param b second vector.
+ * @return multiplication result.
+*/
 std::vector<std::complex<double>> matmul(std::vector<std::complex<double>> a, std::vector<std::complex<double>> b) {
     std::vector<std::complex<double>> res(4);
     assert(a.size() == 4 && b.size() == 4);
@@ -20,14 +27,33 @@ std::vector<std::complex<double>> matmul(std::vector<std::complex<double>> a, st
     return res;
 }
 
+/**
+ * Working on it.
+ * @param ePrep working...
+ * @param u working...
+ * @return working...
+*/
 std::complex<double> k(double ePerp, std::complex<double> u) {
     return std::sqrt((2*MASS_N/(HBAR*HBAR))*(ePerp - u));
 }
 
+/**
+ * Working on it.
+ * @param kn working...
+ * @param knm1 working...
+ * @return working...
+*/
 std::complex<double> gamma(std::complex<double> kn, std::complex<double> knm1) {
     return knm1/kn;
 }
 
+/**
+ * Working on it.
+ * @param kn working...
+ * @param knm1 working...
+ * @param z working...
+ * @return working...
+*/
 std::vector<std::complex<double>> m(std::complex<double> kn, std::complex<double> knm1, double z) {
     std::vector<std::complex<double>> res(4);
     res[0] = (1.0/2.0)*(1.0 + gamma(kn,knm1))*std::exp(std::complex<double>(0,1)*(knm1-kn)*z);
@@ -37,6 +63,12 @@ std::vector<std::complex<double>> m(std::complex<double> kn, std::complex<double
     return res;
 }
 
+/**
+ * Calculates absorbtion probability of a neutron given its perpendicular energy and boron thickness of detector.
+ * @param ePerp Neutron energy perpendicular to detector surface.
+ * @param thickBoron Thickness of boron layer.
+ * @return Absorption probability fo neutron on collision.
+*/
 double absorbProbQuantOxide(double ePerp, double thickBoron) {
 //    const double voxide = (2*M_PI*(HBAR*HBAR)/MASS_N)*ABORON*NBORONB2O3 + (2*M_PI*(HBAR*HBAR)/MASS_N)*AOXYGEN*NOXYGENB2O3;
 //    const double woxide = (HBAR/2)*NBORONB2O3*SIGMABORON + (HBAR/2)*NOXYGENB2O3*SIGMAOXYGEN;
@@ -60,6 +92,16 @@ double absorbProbQuantOxide(double ePerp, double thickBoron) {
     return 1.0 - (std::conj(-mbar[2]/mbar[3])*-mbar[2]/mbar[3]).real();
 }
 
+/**
+ * Tests whether a neutron is absorbed byt eh detector upon incident.
+ * @param ePerp Neutron energy perpendicular to detector surface.
+ * @param thickBoron Thickness of boron layer.
+ * @param x x-coordinate of the neutron.
+ * @param y y-coordinate of the neutron.
+ * @param z z-coordinate of the neutron.
+ * @param zOff working...
+ * @return bool indicating whether the neutron is absorbed.
+*/
 bool absorbMultilayer(double ePerp, double thickBoron, double x, double y, double z, double zOff) {
     double zeta;
     if(x > 0) {

@@ -34,16 +34,40 @@
 #define SIGMASULFUR 1.556e-28
 //#define SIGMASULFUR 0.0
 
+/**
+ * @see quant_refl.cpp
+ * Performs matrix multiplication of two 2x2 matrices with complex entries.
+*/
 std::vector<std::complex<double>> matmul(std::vector<std::complex<double>> a, std::vector<std::complex<double>> b);
 
+/**
+ * @see quant_refl.cpp
+ * 
+*/
 std::complex<double> k(double ePerp, std::complex<double> u);
 
+/**
+ * @see quant_refl.cpp
+ * 
+*/
 std::complex<double> gamma(std::complex<double> kn, std::complex<double> knm1);
 
+/**
+ * @see quant_refl.cpp
+ * 
+*/
 std::vector<std::complex<double>> m(std::complex<double> kn, std::complex<double> knm1, double z);
 
+/**
+ * @see quant_refl.cpp
+ * Calculates absorbtion probability of a neutron given its perpendicular energy and boron thickness of detector.
+*/
 double absorbProbQuantOxide(double ePerp, double thickBoron);
 
+/**
+ * @see quant_refl.cpp
+ * Tests whether a neutron is absorbed byt eh detector upon incident.
+*/
 bool absorbMultilayer(double ePerp, double thickBoron, double x, double y, double z, double zOff);
 
 #endif /* QUANT_REFL_H */

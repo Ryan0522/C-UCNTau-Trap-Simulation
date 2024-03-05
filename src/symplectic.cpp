@@ -6,6 +6,14 @@ extern "C" {
     #include "../inc/fields_nate.h"
 }
 
+/**
+ * Advances the system's state by one inetegration step using symplectic integration scheme.
+ * @param state state of the system.
+ * @param deltaT time step.
+ * @param energy total enerygy of the system.
+ * @param t current time.
+ * @param tr struct storing all previous steps. (?)
+*/
 void symplecticStep(std::vector<double> &state, double deltaT, double &energy, double t, trace tr) {
     double fx, fy, fz, totalU;
     int n;
