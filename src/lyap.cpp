@@ -5,6 +5,14 @@
 #include "../inc/geometry.hpp"
 #include <cmath>
 
+/**
+ * Calculates the Lyaponov Exponent of the neutron motion given parameters.
+ * @param ref reference vector to calculate LCE on.
+ * @param dt change in time per step.
+ * @param tr struct storing all previous steps. (?)
+ * @param tStart time to begin calculate LCE.
+ * @return struct storing the relevant information of the LCE calculated.
+*/
 lyapResult calcLyap(std::vector<double> ref, double dt, trace tr, double tStart) {
     lyapResult res;
     double t = 0;

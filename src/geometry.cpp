@@ -10,6 +10,12 @@ extern "C" {
     #include "../inc/xorshift.h"
 }
 
+/**
+ * Calculates the cross product of two functions.
+ * @param a First vector in the cross product.
+ * @param b Second vector in the cross product.
+ * @return A vector of doubles as the outcome of the cross product.
+*/
 std::vector<double> cross(std::vector<double> a, std::vector<double> b) {
     std::vector<double> res(3);
     res[0] = a[1]*b[2]-a[2]*b[1];
@@ -18,6 +24,10 @@ std::vector<double> cross(std::vector<double> a, std::vector<double> b) {
     return res;
 }
 
+/**
+ * Normalizes a vector.
+ * @param a Vector to noramlize
+*/
 void normalize(std::vector<double> &a) {
     assert(a.size()==3);
     double len = sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
@@ -26,6 +36,11 @@ void normalize(std::vector<double> &a) {
     a[2] = a[2]/len;
 }
 
+/**
+ * Working on definition.
+ * @param t working...
+ * @return working...
+*/
 double zOffDipCalc(double t) {
     double acc = 6.0;
     double vel = 1.6;
@@ -148,6 +163,12 @@ double zOffDipCalc(double t) {
 //    }
 //}
 
+/**
+ * Simulates the reflection of the neutron off the detector.
+ * @param state state of the neutron
+ * @param norm normal vector to the surface of detector.
+ * @param tang tangent vector to the surface of detector.
+*/
 void reflect(std::vector<double> &state, std::vector<double> norm, std::vector<double> tang) {
     double pTarget = sqrt(state[3]*state[3] + state[4]*state[4] + state[5]*state[5]);
     std::vector<double> tangPrime = cross(norm, tang);
@@ -173,6 +194,14 @@ void reflect(std::vector<double> &state, std::vector<double> norm, std::vector<d
     state[5] = newPdir[2] * pTarget / pLen;
 }
 
+/**
+ * Checks if the point 3D is hit by the detector. (?)
+ * @param x x-coordinate.
+ * @param y y-coordinate.
+ * @param z z-coordinate.
+ * @param zOff working...
+ * @return bool indicating whether the point is hit.
+*/
 bool checkDagHit(double x, double y, double z, double zOff) {
     double zeta;
     if(x > 0) {
@@ -187,6 +216,13 @@ bool checkDagHit(double x, double y, double z, double zOff) {
     return false;
 }
 
+/**
+ * Working on it
+ * @param state working...
+ * @param prevState working...
+ * @param clearnHeight working...
+ * @return working...
+*/
 int checkClean(std::vector<double> state, std::vector<double> prevState, double cleanHeight) {
     if((prevState[2] < -1.5 + cleanHeight && state[2] > -1.5 + cleanHeight) || (prevState[2] > -1.5 + cleanHeight && state[2] < -1.5 + cleanHeight)) {
         if(state[1] > 0) {
@@ -199,6 +235,13 @@ int checkClean(std::vector<double> state, std::vector<double> prevState, double 
     return 0;
 }
 
+/**
+ * Calculates the distance between the bottom edge of the detector and the Halbach array. (?)
+ * @param x x-coordinate.  
+ * @param y y-coordinate.
+ * @param z z-coordinate.
+ * @return zeta of the detector
+*/
 double calcDagZeta(double x, double y, double z, double zOff) {
     double zeta;
     if(x > 0) {
@@ -210,6 +253,14 @@ double calcDagZeta(double x, double y, double z, double zOff) {
     return zeta;
 }
 
+/**
+ * Checks if a point in 3D space hit a specific part of the house. (?)
+ * @param x x-coordinate.
+ * @param y y-coordinate.
+ * @param z z-coordinate.
+ * @param zOff working...
+ * @return bool indicating whether the point hits.
+*/
 bool checkHouseHitLow(double x, double y, double z, double zOff) {
     if(z >= (-1.5 + zOff + 0.2) && z < (-1.5 + zOff + 0.2 + 0.14478) && fabs(x + 0.1524) < (0.40 + 2.0179*(z + 1.5 - zOff - 0.2))/2.0) {
         return true;
@@ -217,6 +268,14 @@ bool checkHouseHitLow(double x, double y, double z, double zOff) {
     return false;
 }
 
+/**
+ * Checks if a point in 3D space hit a specific part of the house. (?)
+ * @param x x-coordinate.
+ * @param y y-coordinate.
+ * @param z z-coordinate.
+ * @param zOff working...
+ * @return bool indicating whether the point hits.
+*/
 bool checkHouseHitHigh(double x, double y, double z, double zOff) {
     if(z >= (-1.5 + zOff + 0.2 + 0.14478) && z < (-1.5 + zOff + 0.2 + 0.2667) && fabs(x + 0.1524) < 0.69215/2.0) {
         return true;
@@ -224,6 +283,12 @@ bool checkHouseHitHigh(double x, double y, double z, double zOff) {
     return false;
 }
 
+/**
+ * Initializes a state close to ref for further analysis in perturbation of initial condition. 
+ * The specific adjustments made to prepare the pair vector is through the momentum components.
+ * @param ref reference vector.
+ * @return the initialized state with perturbation.
+*/
 std::vector<double> initializeLyapState(std::vector<double> ref) {
     double lenP = sqrt(ref[3]*ref[3] + ref[4]*ref[4] + ref[5]*ref[5]);
     
@@ -260,6 +325,11 @@ std::vector<double> initializeLyapState(std::vector<double> ref) {
     return pair;
 }
 
+/**
+ * Adjusts the elements of pair vector so it gets closer to ref. (?)
+ * @param ref reference vector.
+ * @param pair second vector.
+*/
 void resetStates(std::vector<double> ref, std::vector<double> &pair) {
     std::vector<double> dist(6);
     dist[0] = pair[0]-ref[0];
@@ -279,6 +349,13 @@ void resetStates(std::vector<double> ref, std::vector<double> &pair) {
     pair[5] = ref[5] + scaling*dist[5];
 }
 
+/**
+ * Calculates the distance between two vectors.
+ * 
+ * @param ref reference vector.
+ * @param pair second vector.
+ * @return A double as the distance between ref and pair.
+*/
 double distance(std::vector<double> ref, std::vector<double> pair) {
     double dist = 0;
     dist += (pair[0]-ref[0])*(pair[0]-ref[0])/(XSCALE*XSCALE);

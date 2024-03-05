@@ -22,6 +22,16 @@
 //#define AMPLITUDE 0.000001
 #define KAPPA 1000
 
+/**
+ * Simulate movement and/or motion based on recorded traces. (?)
+ * The function shifts the coordinates (x, y, z) based on given parameters.
+ * The function interpolates between consecutive positions stored in trace to estimate position at time t.
+ * @param x x-coordinate.
+ * @param y y-coordinate.
+ * @param z z-coordinate.
+ * @param t time-step. (?)
+ * @param tr struct storing all previous steps. (?)
+*/
 void shift(double *x, double *y, double *z, double t, trace* tr) {
     int iLow = (int)(t/SAMPDT);
     double frac = (t - iLow*SAMPDT)/(SAMPDT);
@@ -34,6 +44,20 @@ void shift(double *x, double *y, double *z, double t, trace* tr) {
     *z = *z + HEATMULT*(tr->z[iLow] + frac*(tr->z[iHi] - tr->z[iLow]));
 }
 
+/**
+ * Computes force experineced by a point with coordinates (x_in, y_in, z_in).
+ * The functino modifyies fx, fy, fz, and totalU 
+ * (corresponding to force components and total potential energy) based on the coordinates.
+ * @param x_in x-coordinate of the point.
+ * @param y_in y-coordinate of the point.
+ * @param z_in z-coordinate of the point.
+ * @param fx force in x-direction at the point.
+ * @param fy force in y-direction at the point.
+ * @param fz force in z-direction at the point.
+ * @param totalU - Potential energy at the point.
+ * @param t time-step. (?)
+ * @param tr struct storing all previous steps. (?)
+*/
 void force(double *x_in, double *y_in, double *z_in, double *fx, double *fy, double *fz, double *totalU, double* t, trace* tr) //analytical form of halbach field force, mu*del(mod(B))
 {
 //    printf("%f %f %e\n", *t, *freq, AMPLITUDE * sin(2*M_PI * FREQ * (*t)));
@@ -170,6 +194,16 @@ void force(double *x_in, double *y_in, double *z_in, double *fx, double *fy, dou
     *fz = gz;
 }
 
+/**
+ * Computes the total magnetic field strength at a given point (x_in, y_in, z_in).
+ * The function computes magnetic field strengh based on the Halbach field configuration and modify the value of totalB.
+ * @param x_in x-coordinate of the point.
+ * @param y_in y-coordinate of the point.
+ * @param z_in z-coordinate of the point.
+ * @param totalB total magnetic field strength at the point.
+ * @param t time-step. (?)
+ * @param tr struct storing all previous steps. (?)
+*/
 void fieldstrength(double *x_in, double *y_in, double *z_in, double *totalB, double* t, trace* tr)
 {
      double A = 4*B_REM/(M_PI*sqrt(2));
@@ -231,6 +265,16 @@ void fieldstrength(double *x_in, double *y_in, double *z_in, double *totalB, dou
     }
 }
 
+/**
+ * Computes the total potential energy at a given point (x_in, y_in, z_in).
+ * The function computes total potential energy and modify the value of totalB.
+ * @param x_in x-coordinate of the point.
+ * @param y_in y-coordinate of the point.
+ * @param z_in z-coordinate of the point.
+ * @param totalU total potentail energy at the point.
+ * @param t time-step. (?)
+ * @param tr struct storing all previous steps. (?)
+*/
 void potential(double *x_in, double *y_in, double *z_in, double *totalU, double* t, trace* tr) //-mu*mod(B) + g*z. remember that mu is already negative.
 {
     double A = 4*B_REM/(M_PI*sqrt(2));
